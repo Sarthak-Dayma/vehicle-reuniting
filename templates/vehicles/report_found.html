@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Report a Found Vehicle - VehicleReunite{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow">
+                <div class="card-header bg-white py-3">
+                    <h1 class="card-title h3 mb-1">Report a Found Vehicle</h1>
+                    <p class="text-muted mb-0">Help reunite this vehicle with its owner by providing as much detail as possible.</p>
+                </div>
+                
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        
+                        <h4 class="mb-3">Vehicle Information</h4>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                {{ form.make|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.model|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.color|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.license_plate|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <h4 class="mb-3">Location Information</h4>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                {{ form.location|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.city|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.state|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.zipcode|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.landmark|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <h4 class="mb-3">Vehicle Photo</h4>
+                        <div class="mb-4">
+                            <div class="mb-3">
+                                {{ form.photo|as_crispy_field }}
+                            </div>
+                            <div id="photo-preview" class="d-none mt-3">
+                                <img src="#" alt="Vehicle preview" class="img-fluid rounded" style="max-height: 200px;">
+                            </div>
+                        </div>
+                        
+                        <h4 class="mb-3">Additional Details</h4>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                {{ form.condition|as_crispy_field }}
+                            </div>
+                            <div class="col-md-12">
+                                {{ form.notes|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <h4 class="mb-3">Your Contact Information (Optional)</h4>
+                        <p class="text-muted small mb-3">This information will only be shared with the vehicle owner if they need additional details.</p>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                {{ form.reporter_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.reporter_email|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Submit Report</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="border-t py-6 md:py-8">
+  <div class="container flex flex-col items-center justify-center gap-4 px-4 md:px-6 md:flex-row">
+    <div class="flex items-center gap-2">
+      <i class="fas fa-car me-2"></i>
+      <span class="text-sm font-medium">VehicleReunite</span>
+    </div>
+  </div>
+</footer>
+
+{% block extra_js %}
+<script>
+    // Preview uploaded image
+    document.addEventListener('DOMContentLoaded', function() {
+        const photoInput = document.getElementById('id_photo');
+        const photoPreview = document.getElementById('photo-preview');
+        const previewImg = photoPreview.querySelector('img');
+        
+        photoInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    photoPreview.classList.remove('d-none');
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                photoPreview.classList.add('d-none');
+            }
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}
