@@ -29,6 +29,11 @@ class FoundVehicle(BaseVehicle):
         return f"{self.color} {self.make} {self.model} - {self.license_plate}"
 
 class LostVehicle(BaseVehicle):
+    year = models.CharField(max_length=4, help_text="Year of manufacture")
+    vin_number = models.CharField(max_length=17, blank=True, null=True, 
+                                 help_text="Vehicle Identification Number (VIN) or Chassis Number")
+    engine_number = models.CharField(max_length=50, blank=True, null=True,
+                                   help_text="Engine number if available")
     last_seen_location = models.CharField(max_length=255)
     last_seen_date = models.DateField()
     last_seen_time = models.TimeField(null=True, blank=True)

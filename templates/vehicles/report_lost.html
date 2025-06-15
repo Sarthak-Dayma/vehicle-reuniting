@@ -3,87 +3,352 @@
 
 {% block title %}Report a Lost Vehicle - VehicleReunite{% endblock %}
 
+{% block extra_css %}
+<style>
+    .form-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem 0.5rem 0 0;
+        margin-bottom: 0;
+    }
+    
+    .form-section h4 {
+        margin: 0;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+    }
+    
+    .form-section i {
+        margin-right: 0.5rem;
+        font-size: 1.2em;
+    }
+    
+    .form-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 0 0 0.5rem 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .main-card {
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+    
+    .main-card .card-header {
+        background: linear-gradient(135deg, #4a6cf7 0%, #667eea 100%);
+        color: white;
+        border: none;
+        padding: 2rem;
+    }
+    
+    .form-control:focus {
+        border-color: #4a6cf7;
+        box-shadow: 0 0 0 0.25rem rgba(74, 108, 247, 0.25);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #4a6cf7 0%, #667eea 100%);
+        border: none;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(74, 108, 247, 0.4);
+    }
+    
+    .btn-outline-secondary {
+        border-color: #6c757d;
+        color: #6c757d;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        transform: translateY(-2px);
+    }
+    
+    .photo-upload-area {
+        border: 2px dashed #dee2e6;
+        border-radius: 0.5rem;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+    
+    .photo-upload-area:hover {
+        border-color: #4a6cf7;
+        background: #f0f4ff;
+    }
+    
+    .photo-upload-area.dragover {
+        border-color: #4a6cf7;
+        background: #e3f2fd;
+    }
+    
+    .upload-icon {
+        font-size: 3rem;
+        color: #6c757d;
+        margin-bottom: 1rem;
+    }
+    
+    .required-field::after {
+        content: " *";
+        color: #dc3545;
+    }
+    
+    .field-help {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+    
+    .progress-indicator {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        padding: 0 1rem;
+    }
+    
+    .progress-step {
+        flex: 1;
+        text-align: center;
+        position: relative;
+    }
+    
+    .progress-step::before {
+        content: '';
+        position: absolute;
+        top: 15px;
+        left: 50%;
+        right: -50%;
+        height: 2px;
+        background: #dee2e6;
+        z-index: 1;
+    }
+    
+    .progress-step:last-child::before {
+        display: none;
+    }
+    
+    .progress-step-circle {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #dee2e6;
+        color: #6c757d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.5rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .progress-step.active .progress-step-circle {
+        background: #4a6cf7;
+        color: white;
+    }
+    
+    .progress-step.completed .progress-step-circle {
+        background: #28a745;
+        color: white;
+    }
+    
+    .progress-step.completed::before {
+        background: #28a745;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <div class="card shadow">
-                <div class="card-header bg-white py-3">
-                    <h1 class="card-title h3 mb-1">Register Your Lost Vehicle</h1>
-                    <p class="text-muted mb-0">Provide details about your lost vehicle. You'll be notified if someone reports finding it.</p>
+            <div class="card main-card">
+                <div class="card-header text-center">
+                    <h1 class="card-title h2 mb-2">
+                        <i class="fas fa-car-crash me-3"></i>
+                        Register Your Lost Vehicle
+                    </h1>
+                    <p class="mb-0 opacity-90">Provide detailed information about your lost vehicle. We'll notify you immediately if someone reports finding it.</p>
                 </div>
                 
-                <div class="card-body">
-                    <form method="post" enctype="multipart/form-data" novalidate>
+                <div class="card-body p-0">
+                    <form method="post" enctype="multipart/form-data" novalidate id="lostVehicleForm">
                         {% csrf_token %}
                         
-                        <h4 class="mb-3">Vehicle Information</h4>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                {{ form.make|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.model|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.color|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.license_plate|as_crispy_field }}
+                        <!-- Vehicle Information Section -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-car"></i> Vehicle Information</h4>
+                        </div>
+                        <div class="form-content">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label for="{{ form.make.id_for_label }}" class="form-label required-field">Make</label>
+                                    {{ form.make }}
+                                    <div class="field-help">Brand of your vehicle (e.g., Toyota, Ford, Honda)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.model.id_for_label }}" class="form-label required-field">Model</label>
+                                    {{ form.model }}
+                                    <div class="field-help">Model of your vehicle (e.g., Camry, F-150, Civic)</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="{{ form.year.id_for_label }}" class="form-label required-field">Year</label>
+                                    {{ form.year }}
+                                    <div class="field-help">Year of manufacture</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="{{ form.color.id_for_label }}" class="form-label required-field">Color</label>
+                                    {{ form.color }}
+                                    <div class="field-help">Primary color of your vehicle</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="{{ form.license_plate.id_for_label }}" class="form-label required-field">License Plate</label>
+                                    {{ form.license_plate }}
+                                    <div class="field-help">Full license plate number</div>
+                                </div>
                             </div>
                         </div>
                         
-                        <h4 class="mb-3">Vehicle Photo</h4>
-                        <div class="mb-4">
-                            <div class="mb-3">
-                                {{ form.photo|as_crispy_field }}
-                            </div>
-                            <div id="photo-preview" class="d-none mt-3">
-                                <img src="#" alt="Vehicle preview" class="img-fluid rounded" style="max-height: 200px;">
+                        <!-- Vehicle Identification Section -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-id-card"></i> Vehicle Identification</h4>
+                        </div>
+                        <div class="form-content">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label for="{{ form.vin_number.id_for_label }}" class="form-label">VIN / Chassis Number</label>
+                                    {{ form.vin_number }}
+                                    <div class="field-help">17-character Vehicle Identification Number (usually found on dashboard or door frame)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.engine_number.id_for_label }}" class="form-label">Engine Number</label>
+                                    {{ form.engine_number }}
+                                    <div class="field-help">Engine number if available (usually found on engine block)</div>
+                                </div>
                             </div>
                         </div>
                         
-                        <h4 class="mb-3">Last Known Information</h4>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-12">
-                                {{ form.last_seen_location|as_crispy_field }}
+                        <!-- Vehicle Photo Section -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-camera"></i> Vehicle Photo</h4>
+                        </div>
+                        <div class="form-content">
+                            <div class="photo-upload-area" id="photoUploadArea">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <h5>Upload a clear photo of your vehicle</h5>
+                                <p class="text-muted mb-3">Drag and drop your photo here, or click to browse</p>
+                                {{ form.photo }}
+                                <div class="field-help mt-2">Accepted formats: JPG, PNG, GIF (Max size: 5MB)</div>
                             </div>
-                            <div class="col-md-6">
-                                {{ form.last_seen_date|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.last_seen_time|as_crispy_field }}
-                            </div>
-                            <div class="col-md-12">
-                                {{ form.circumstances|as_crispy_field }}
+                            <div id="photo-preview" class="d-none mt-4 text-center">
+                                <img src="#" alt="Vehicle preview" class="img-fluid rounded shadow" style="max-height: 300px;">
+                                <div class="mt-2">
+                                    <button type="button" class="btn btn-sm btn-outline-danger" id="removePhoto">
+                                        <i class="fas fa-trash"></i> Remove Photo
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         
-                        <h4 class="mb-3">Distinguishing Features</h4>
-                        <div class="mb-4">
-                            {{ form.features|as_crispy_field }}
+                        <!-- Last Known Information Section -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-map-marker-alt"></i> Last Known Information</h4>
+                        </div>
+                        <div class="form-content">
+                            <div class="row g-4">
+                                <div class="col-md-12">
+                                    <label for="{{ form.last_seen_location.id_for_label }}" class="form-label required-field">Last Known Location</label>
+                                    {{ form.last_seen_location }}
+                                    <div class="field-help">Address or area where vehicle was last seen</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.last_seen_date.id_for_label }}" class="form-label required-field">Date Last Seen</label>
+                                    {{ form.last_seen_date }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.last_seen_time.id_for_label }}" class="form-label">Time Last Seen (Approximate)</label>
+                                    {{ form.last_seen_time }}
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="{{ form.circumstances.id_for_label }}" class="form-label">Circumstances</label>
+                                    {{ form.circumstances }}
+                                    <div class="field-help">Describe how the vehicle was lost (theft, breakdown, etc.)</div>
+                                </div>
+                            </div>
                         </div>
                         
-                        <h4 class="mb-3">Your Contact Information</h4>
-                        <p class="text-muted small mb-3">This information will be used to notify you if your vehicle is found.</p>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                {{ form.owner_name|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.owner_email|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.owner_phone|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.alt_contact|as_crispy_field }}
+                        <!-- Distinguishing Features Section -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-search"></i> Distinguishing Features</h4>
+                        </div>
+                        <div class="form-content">
+                            <label for="{{ form.features.id_for_label }}" class="form-label">Special Features or Markings</label>
+                            {{ form.features }}
+                            <div class="field-help">Describe any distinguishing features (dents, stickers, modifications, scratches, etc.)</div>
+                        </div>
+                        
+                        <!-- Contact Information Section -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-user"></i> Your Contact Information</h4>
+                        </div>
+                        <div class="form-content">
+                            <p class="text-muted mb-4">
+                                <i class="fas fa-shield-alt me-2"></i>
+                                This information will be used to notify you if your vehicle is found. Your privacy is protected.
+                            </p>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label for="{{ form.owner_name.id_for_label }}" class="form-label required-field">Full Name</label>
+                                    {{ form.owner_name }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.owner_email.id_for_label }}" class="form-label required-field">Email Address</label>
+                                    {{ form.owner_email }}
+                                    <div class="field-help">We'll send notifications to this email</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.owner_phone.id_for_label }}" class="form-label required-field">Phone Number</label>
+                                    {{ form.owner_phone }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.alt_contact.id_for_label }}" class="form-label">Alternative Contact</label>
+                                    {{ form.alt_contact }}
+                                    <div class="field-help">Alternative contact method (optional)</div>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="d-flex justify-content-between mt-4">
-                            <a href="{% url 'home' %}" class="btn btn-outline-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Register Lost Vehicle</button>
+                        <!-- Form Actions -->
+                        <div class="p-4 bg-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    <i class="fas fa-paper-plane me-2"></i>Register Lost Vehicle
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -92,38 +357,105 @@
     </div>
 </div>
 
-<footer class="border-t py-6 md:py-8">
-  <div class="container flex flex-col items-center justify-center gap-4 px-4 md:px-6 md:flex-row">
-    <div class="flex items-center gap-2">
-      <i class="fas fa-car me-2"></i>
-      <span class="text-sm font-medium">VehicleReunite</span>
-    </div>
-  </div>
-</footer>
-
 {% block extra_js %}
 <script>
-    // Preview uploaded image
-    document.addEventListener('DOMContentLoaded', function() {
-        const photoInput = document.getElementById('id_photo');
-        const photoPreview = document.getElementById('photo-preview');
-        const previewImg = photoPreview.querySelector('img');
-        
-        photoInput.addEventListener('change', function() {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    photoPreview.classList.remove('d-none');
-                }
-                
-                reader.readAsDataURL(this.files[0]);
-            } else {
-                photoPreview.classList.add('d-none');
-            }
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    const photoInput = document.getElementById('id_photo');
+    const photoPreview = document.getElementById('photo-preview');
+    const previewImg = photoPreview.querySelector('img');
+    const uploadArea = document.getElementById('photoUploadArea');
+    const removePhotoBtn = document.getElementById('removePhoto');
+    const form = document.getElementById('lostVehicleForm');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // Photo upload functionality
+    photoInput.addEventListener('change', function() {
+        handleFileSelect(this.files[0]);
     });
+    
+    // Drag and drop functionality
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+    });
+    
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            photoInput.files = files;
+            handleFileSelect(files[0]);
+        }
+    });
+    
+    // Click to upload
+    uploadArea.addEventListener('click', function() {
+        photoInput.click();
+    });
+    
+    // Remove photo functionality
+    removePhotoBtn.addEventListener('click', function() {
+        photoInput.value = '';
+        photoPreview.classList.add('d-none');
+        uploadArea.style.display = 'block';
+    });
+    
+    function handleFileSelect(file) {
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                photoPreview.classList.remove('d-none');
+                uploadArea.style.display = 'none';
+            }
+            
+            reader.readAsDataURL(file);
+        } else if (file) {
+            alert('Please select a valid image file.');
+            photoInput.value = '';
+        }
+    }
+    
+    // Form validation and submission
+    form.addEventListener('submit', function(e) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+        
+        // Re-enable button after 3 seconds in case of error
+        setTimeout(function() {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Register Lost Vehicle';
+        }, 3000);
+    });
+    
+    // Auto-format phone number
+    const phoneInput = document.getElementById('id_owner_phone');
+    phoneInput.addEventListener('input', function() {
+        let value = this.value.replace(/\D/g, '');
+        if (value.length >= 6) {
+            value = value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+        } else if (value.length >= 3) {
+            value = value.replace(/(\d{3})(\d{0,3})/, '($1) $2');
+        }
+        this.value = value;
+    });
+    
+    // VIN validation
+    const vinInput = document.getElementById('id_vin_number');
+    vinInput.addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+        if (this.value.length > 17) {
+            this.value = this.value.substring(0, 17);
+        }
+    });
+});
 </script>
 {% endblock %}
 {% endblock %}

@@ -11,17 +11,22 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/css/styles.css">
     
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <header class="navbar navbar-expand-lg navbar-light border-bottom">
+    <header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
-                <i class="fas fa-car me-2"></i>
-                <span>VehicleReunite</span>
+                <div class="brand-icon me-2">
+                    <i class="fas fa-car"></i>
+                </div>
+                <span class="brand-text">VehicleReunite</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -29,13 +34,19 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'report_found' %}">Report Found</a>
+                        <a class="nav-link" href="{% url 'report_found' %}">
+                            <i class="fas fa-search me-1"></i>Report Found
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'report_lost' %}">Report Lost</a>
+                        <a class="nav-link" href="{% url 'report_lost' %}">
+                            <i class="fas fa-car-crash me-1"></i>Report Lost
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                        <a class="nav-link" href="{% url 'dashboard' %}">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -46,7 +57,16 @@
         {% if messages %}
             <div class="container mt-3">
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm">
+                        {% if message.tags == 'success' %}
+                            <i class="fas fa-check-circle me-2"></i>
+                        {% elif message.tags == 'error' %}
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                        {% elif message.tags == 'warning' %}
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                        {% else %}
+                            <i class="fas fa-info-circle me-2"></i>
+                        {% endif %}
                         {{ message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
@@ -57,7 +77,7 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="border-top py-4 mt-5">
+    <footer class="bg-dark text-light py-4 mt-5">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-12 text-center">

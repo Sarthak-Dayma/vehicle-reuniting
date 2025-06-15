@@ -2,71 +2,331 @@
 
 {% block title %}VehicleReunite - Reunite With Your Lost Vehicle{% endblock %}
 
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 5rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="1" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .hero-subtitle {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        opacity: 0.95;
+        line-height: 1.6;
+    }
+    
+    .hero-buttons .btn {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 0.75rem;
+        margin: 0.5rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-hero-primary {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        backdrop-filter: blur(10px);
+    }
+    
+    .btn-hero-primary:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        color: white;
+    }
+    
+    .btn-hero-secondary {
+        background: white;
+        border: 2px solid white;
+        color: #667eea;
+    }
+    
+    .btn-hero-secondary:hover {
+        background: transparent;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+    
+    .hero-image {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .features-section {
+        padding: 5rem 0;
+        background: #f8f9fa;
+    }
+    
+    .feature-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 2.5rem;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border: none;
+        height: 100%;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: white;
+        font-size: 2rem;
+    }
+    
+    .feature-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #2d3748;
+    }
+    
+    .feature-description {
+        color: #718096;
+        line-height: 1.6;
+    }
+    
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1rem;
+        color: #2d3748;
+    }
+    
+    .section-subtitle {
+        font-size: 1.2rem;
+        text-align: center;
+        color: #718096;
+        margin-bottom: 3rem;
+    }
+    
+    .stats-section {
+        background: linear-gradient(135deg, #4a6cf7 0%, #667eea 100%);
+        color: white;
+        padding: 4rem 0;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+    
+    .cta-section {
+        background: #2d3748;
+        color: white;
+        padding: 4rem 0;
+        text-align: center;
+    }
+    
+    .cta-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .cta-subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+    
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-buttons .btn {
+            display: block;
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+        
+        .feature-card {
+            margin-bottom: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<section class="py-5 bg-light">
+<!-- Hero Section -->
+<section class="hero-section">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6 mb-4 mb-lg-0">
-                <h1 class="display-5 fw-bold mb-3">Reunite With Your Lost Vehicle</h1>
-                <p class="lead text-muted mb-4">
-                    Our platform connects people who find abandoned vehicles with those who have lost them. 
-                    Report a found vehicle or register your lost one to get automatic notifications when matches are found.
+            <div class="col-lg-6 hero-content">
+                <h1 class="hero-title">Reunite With Your Lost Vehicle</h1>
+                <p class="hero-subtitle">
+                    Our advanced platform connects people who find abandoned vehicles with those who have lost them. 
+                    Report a found vehicle or register your lost one to get instant notifications when matches are found.
                 </p>
-                <div class="d-grid gap-2 d-sm-flex">
-                    <a href="{% url 'report_found' %}" class="btn btn-primary btn-lg px-4">Report Found Vehicle</a>
-                    <a href="{% url 'report_lost' %}" class="btn btn-outline-secondary btn-lg px-4">Report Lost Vehicle</a>
+                <div class="hero-buttons">
+                    <a href="{% url 'report_found' %}" class="btn btn-hero-primary">
+                        <i class="fas fa-search me-2"></i>Report Found Vehicle
+                    </a>
+                    <a href="{% url 'report_lost' %}" class="btn btn-hero-secondary">
+                        <i class="fas fa-car-crash me-2"></i>Report Lost Vehicle
+                    </a>
                 </div>
             </div>
             <div class="col-lg-6 text-center">
-                <img src="/static/img/vehicle-finder.svg" alt="Vehicle finder illustration" class="img-fluid rounded" style="max-height: 400px;">
+                <div class="hero-image">
+                    <img src="/static/img/vehicle-finder.svg" alt="Vehicle finder illustration" class="img-fluid" style="max-height: 400px;">
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-5">
+<!-- Stats Section -->
+<section class="stats-section">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-6 fw-bold">How It Works</h2>
-            <p class="lead text-muted">Our platform makes it easy to report and find lost vehicles</p>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Monitoring System</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Anonymous Reporting</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-item">
+                    <span class="stat-number">Instant</span>
+                    <span class="stat-label">Email Notifications</span>
+                </div>
+            </div>
         </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">Our platform makes it easy to report and find lost vehicles with just a few clicks</p>
         
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <div class="mb-3">
-                            <i class="fas fa-map-marker-alt fa-3x text-primary"></i>
-                        </div>
-                        <h3 class="card-title h5">Report Found</h3>
-                        <p class="card-text">If you find an abandoned vehicle, report it with a photo, license plate, and location details.</p>
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
                     </div>
+                    <h3 class="feature-title">Report Found</h3>
+                    <p class="feature-description">
+                        Found an abandoned vehicle? Report it with photos, license plate details, and location information. 
+                        Help reunite vehicles with their rightful owners.
+                    </p>
                 </div>
             </div>
             
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <div class="mb-3">
-                            <i class="fas fa-search fa-3x text-primary"></i>
-                        </div>
-                        <h3 class="card-title h5">Register Lost</h3>
-                        <p class="card-text">If you've lost your vehicle, register its details including license plate number and description.</p>
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-car-crash"></i>
                     </div>
+                    <h3 class="feature-title">Register Lost</h3>
+                    <p class="feature-description">
+                        Lost your vehicle? Register its details including license plate, VIN, and distinguishing features. 
+                        Our system will monitor for matches automatically.
+                    </p>
                 </div>
             </div>
             
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <div class="mb-3">
-                            <i class="fas fa-bell fa-3x text-primary"></i>
-                        </div>
-                        <h3 class="card-title h5">Get Notified</h3>
-                        <p class="card-text">When a match is found, you'll receive an immediate notification with the location of your vehicle.</p>
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
                     </div>
+                    <h3 class="feature-title">Get Notified</h3>
+                    <p class="feature-description">
+                        When a match is found, you'll receive an immediate email notification with the exact location 
+                        and contact details of the person who found your vehicle.
+                    </p>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <h2 class="cta-title">Ready to Get Started?</h2>
+        <p class="cta-subtitle">Join thousands of users who trust VehicleReunite to help find their lost vehicles</p>
+        <div class="hero-buttons">
+            <a href="{% url 'report_found' %}" class="btn btn-hero-primary">
+                <i class="fas fa-search me-2"></i>Report Found Vehicle
+            </a>
+            <a href="{% url 'dashboard' %}" class="btn btn-hero-secondary">
+                <i class="fas fa-tachometer-alt me-2"></i>View Dashboard
+            </a>
         </div>
     </div>
 </section>

@@ -3,89 +3,287 @@
 
 {% block title %}Report a Found Vehicle - VehicleReunite{% endblock %}
 
+{% block extra_css %}
+<style>
+    .form-section {
+        background: linear-gradient(135deg, #38a169 0%, #48bb78 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem 0.5rem 0 0;
+        margin-bottom: 0;
+    }
+    
+    .form-section h4 {
+        margin: 0;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+    }
+    
+    .form-section i {
+        margin-right: 0.5rem;
+        font-size: 1.2em;
+    }
+    
+    .form-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 0 0 0.5rem 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .main-card {
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+    
+    .main-card .card-header {
+        background: linear-gradient(135deg, #38a169 0%, #48bb78 100%);
+        color: white;
+        border: none;
+        padding: 2rem;
+    }
+    
+    .form-control:focus {
+        border-color: #38a169;
+        box-shadow: 0 0 0 0.25rem rgba(56, 161, 105, 0.25);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #38a169 0%, #48bb78 100%);
+        border: none;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(56, 161, 105, 0.4);
+    }
+    
+    .btn-outline-secondary {
+        border-color: #6c757d;
+        color: #6c757d;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        transform: translateY(-2px);
+    }
+    
+    .photo-upload-area {
+        border: 2px dashed #dee2e6;
+        border-radius: 0.5rem;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+        cursor: pointer;
+    }
+    
+    .photo-upload-area:hover {
+        border-color: #38a169;
+        background: #f0fff4;
+    }
+    
+    .photo-upload-area.dragover {
+        border-color: #38a169;
+        background: #e6fffa;
+    }
+    
+    .upload-icon {
+        font-size: 3rem;
+        color: #6c757d;
+        margin-bottom: 1rem;
+    }
+    
+    .required-field::after {
+        content: " *";
+        color: #dc3545;
+    }
+    
+    .field-help {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+    
+    .location-section {
+        background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    }
+    
+    .details-section {
+        background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+    }
+    
+    .contact-section {
+        background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <div class="card shadow">
-                <div class="card-header bg-white py-3">
-                    <h1 class="card-title h3 mb-1">Report a Found Vehicle</h1>
-                    <p class="text-muted mb-0">Help reunite this vehicle with its owner by providing as much detail as possible.</p>
+            <div class="card main-card">
+                <div class="card-header text-center">
+                    <h1 class="card-title h2 mb-2">
+                        <i class="fas fa-search me-3"></i>
+                        Report a Found Vehicle
+                    </h1>
+                    <p class="mb-0 opacity-90">Help reunite this vehicle with its owner by providing detailed information and photos.</p>
                 </div>
                 
-                <div class="card-body">
-                    <form method="post" enctype="multipart/form-data" novalidate>
+                <div class="card-body p-0">
+                    <form method="post" enctype="multipart/form-data" novalidate id="foundVehicleForm">
                         {% csrf_token %}
                         
-                        <h4 class="mb-3">Vehicle Information</h4>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                {{ form.make|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.model|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.color|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.license_plate|as_crispy_field }}
+                        <!-- Vehicle Information Section -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-car"></i> Vehicle Information</h4>
+                        </div>
+                        <div class="form-content">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label for="{{ form.make.id_for_label }}" class="form-label required-field">Make</label>
+                                    {{ form.make }}
+                                    <div class="field-help">Brand of the vehicle (e.g., Toyota, Ford, Honda)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.model.id_for_label }}" class="form-label required-field">Model</label>
+                                    {{ form.model }}
+                                    <div class="field-help">Model of the vehicle (e.g., Camry, F-150, Civic)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.color.id_for_label }}" class="form-label required-field">Color</label>
+                                    {{ form.color }}
+                                    <div class="field-help">Primary color of the vehicle</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.license_plate.id_for_label }}" class="form-label required-field">License Plate Number</label>
+                                    {{ form.license_plate }}
+                                    <div class="field-help">Full license plate number if visible</div>
+                                </div>
                             </div>
                         </div>
                         
-                        <h4 class="mb-3">Location Information</h4>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-12">
-                                {{ form.location|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.city|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.state|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.zipcode|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.landmark|as_crispy_field }}
+                        <!-- Location Information Section -->
+                        <div class="form-section location-section">
+                            <h4><i class="fas fa-map-marker-alt"></i> Location Information</h4>
+                        </div>
+                        <div class="form-content">
+                            <div class="row g-4">
+                                <div class="col-md-12">
+                                    <label for="{{ form.location.id_for_label }}" class="form-label required-field">Street Address</label>
+                                    {{ form.location }}
+                                    <div class="field-help">Exact street address or intersection where vehicle was found</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.city.id_for_label }}" class="form-label required-field">City</label>
+                                    {{ form.city }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.state.id_for_label }}" class="form-label required-field">State</label>
+                                    {{ form.state }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.zipcode.id_for_label }}" class="form-label required-field">Zip Code</label>
+                                    {{ form.zipcode }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.landmark.id_for_label }}" class="form-label">Nearby Landmarks</label>
+                                    {{ form.landmark }}
+                                    <div class="field-help">Any nearby landmarks or notable locations (optional)</div>
+                                </div>
                             </div>
                         </div>
                         
-                        <h4 class="mb-3">Vehicle Photo</h4>
-                        <div class="mb-4">
-                            <div class="mb-3">
-                                {{ form.photo|as_crispy_field }}
+                        <!-- Vehicle Photo Section -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-camera"></i> Vehicle Photo</h4>
+                        </div>
+                        <div class="form-content">
+                            <div class="photo-upload-area" id="photoUploadArea">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <h5>Upload a clear photo of the vehicle</h5>
+                                <p class="text-muted mb-3">Drag and drop your photo here, or click to browse</p>
+                                {{ form.photo }}
+                                <div class="field-help mt-2">Accepted formats: JPG, PNG, GIF (Max size: 5MB)</div>
                             </div>
-                            <div id="photo-preview" class="d-none mt-3">
-                                <img src="#" alt="Vehicle preview" class="img-fluid rounded" style="max-height: 200px;">
+                            <div id="photo-preview" class="d-none mt-4 text-center">
+                                <img src="#" alt="Vehicle preview" class="img-fluid rounded shadow" style="max-height: 300px;">
+                                <div class="mt-2">
+                                    <button type="button" class="btn btn-sm btn-outline-danger" id="removePhoto">
+                                        <i class="fas fa-trash"></i> Remove Photo
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         
-                        <h4 class="mb-3">Additional Details</h4>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-12">
-                                {{ form.condition|as_crispy_field }}
-                            </div>
-                            <div class="col-md-12">
-                                {{ form.notes|as_crispy_field }}
+                        <!-- Additional Details Section -->
+                        <div class="form-section details-section">
+                            <h4><i class="fas fa-clipboard-list"></i> Additional Details</h4>
+                        </div>
+                        <div class="form-content">
+                            <div class="row g-4">
+                                <div class="col-md-12">
+                                    <label for="{{ form.condition.id_for_label }}" class="form-label required-field">Vehicle Condition</label>
+                                    {{ form.condition }}
+                                    <div class="field-help">Describe the condition of the vehicle (damage, cleanliness, etc.)</div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="{{ form.notes.id_for_label }}" class="form-label">Additional Notes</label>
+                                    {{ form.notes }}
+                                    <div class="field-help">Any other details that might help identify the vehicle or its owner</div>
+                                </div>
                             </div>
                         </div>
                         
-                        <h4 class="mb-3">Your Contact Information (Optional)</h4>
-                        <p class="text-muted small mb-3">This information will only be shared with the vehicle owner if they need additional details.</p>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                {{ form.reporter_name|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.reporter_email|as_crispy_field }}
+                        <!-- Contact Information Section -->
+                        <div class="form-section contact-section">
+                            <h4><i class="fas fa-user"></i> Your Contact Information (Optional)</h4>
+                        </div>
+                        <div class="form-content">
+                            <p class="text-muted mb-4">
+                                <i class="fas fa-shield-alt me-2"></i>
+                                This information will only be shared with the vehicle owner if they need additional details.
+                            </p>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label for="{{ form.reporter_name.id_for_label }}" class="form-label">Your Name</label>
+                                    {{ form.reporter_name }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.reporter_email.id_for_label }}" class="form-label">Email Address</label>
+                                    {{ form.reporter_email }}
+                                    <div class="field-help">For follow-up questions from the owner</div>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="d-flex justify-content-between mt-4">
-                            <a href="{% url 'home' %}" class="btn btn-outline-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Submit Report</button>
+                        <!-- Form Actions -->
+                        <div class="p-4 bg-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Report
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -94,38 +292,90 @@
     </div>
 </div>
 
-<footer class="border-t py-6 md:py-8">
-  <div class="container flex flex-col items-center justify-center gap-4 px-4 md:px-6 md:flex-row">
-    <div class="flex items-center gap-2">
-      <i class="fas fa-car me-2"></i>
-      <span class="text-sm font-medium">VehicleReunite</span>
-    </div>
-  </div>
-</footer>
-
 {% block extra_js %}
 <script>
-    // Preview uploaded image
-    document.addEventListener('DOMContentLoaded', function() {
-        const photoInput = document.getElementById('id_photo');
-        const photoPreview = document.getElementById('photo-preview');
-        const previewImg = photoPreview.querySelector('img');
-        
-        photoInput.addEventListener('change', function() {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    photoPreview.classList.remove('d-none');
-                }
-                
-                reader.readAsDataURL(this.files[0]);
-            } else {
-                photoPreview.classList.add('d-none');
-            }
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    const photoInput = document.getElementById('id_photo');
+    const photoPreview = document.getElementById('photo-preview');
+    const previewImg = photoPreview.querySelector('img');
+    const uploadArea = document.getElementById('photoUploadArea');
+    const removePhotoBtn = document.getElementById('removePhoto');
+    const form = document.getElementById('foundVehicleForm');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // Photo upload functionality
+    photoInput.addEventListener('change', function() {
+        handleFileSelect(this.files[0]);
     });
+    
+    // Drag and drop functionality
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+    });
+    
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            photoInput.files = files;
+            handleFileSelect(files[0]);
+        }
+    });
+    
+    // Click to upload
+    uploadArea.addEventListener('click', function() {
+        photoInput.click();
+    });
+    
+    // Remove photo functionality
+    removePhotoBtn.addEventListener('click', function() {
+        photoInput.value = '';
+        photoPreview.classList.add('d-none');
+        uploadArea.style.display = 'block';
+    });
+    
+    function handleFileSelect(file) {
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                photoPreview.classList.remove('d-none');
+                uploadArea.style.display = 'none';
+            }
+            
+            reader.readAsDataURL(file);
+        } else if (file) {
+            alert('Please select a valid image file.');
+            photoInput.value = '';
+        }
+    }
+    
+    // Form validation and submission
+    form.addEventListener('submit', function(e) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+        
+        // Re-enable button after 3 seconds in case of error
+        setTimeout(function() {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Submit Report';
+        }, 3000);
+    });
+    
+    // Auto-format license plate
+    const licensePlateInput = document.getElementById('id_license_plate');
+    licensePlateInput.addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+});
 </script>
 {% endblock %}
 {% endblock %}
